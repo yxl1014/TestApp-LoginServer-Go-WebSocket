@@ -146,7 +146,9 @@ func (manager *Manager) SendService() {
 		select {
 		case data := <-manager.Message:
 			if groupMap, ok := manager.Group[data.Group]; ok {
+				//conn是client
 				if conn, ok := groupMap[data.Id]; ok {
+					//将data里的数据放到client的msg里
 					conn.Message <- data.Message
 				}
 			}

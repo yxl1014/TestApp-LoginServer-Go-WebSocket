@@ -12,11 +12,15 @@ import (
 )
 
 func WebSocket() {
+	//启动注册器  在client端 连接或者断开时 执行这个
 	go WebsocketManager.Start()
+	//启动两个给指定client发送数据的service
 	go WebsocketManager.SendService()
 	go WebsocketManager.SendService()
+	//启动两个给组发送数据的service
 	go WebsocketManager.SendGroupService()
 	go WebsocketManager.SendGroupService()
+	//启动两个给所有发送数据的service
 	go WebsocketManager.SendAllService()
 	go WebsocketManager.SendAllService()
 	go TestSendGroup()
@@ -29,6 +33,7 @@ func WebSocket() {
 
 	wsGroup := router.Group("/ws")
 	{
+		//这里的：channel是组名
 		wsGroup.GET("/:channel", WebsocketManager.WsClient)
 	}
 
