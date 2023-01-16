@@ -15,7 +15,7 @@ func DecodeProtocol(data []byte) []byte {
 	temp := make([]byte, 4)
 
 	Arraycopy(data, 0, temp, 0, 4)
-	l := binary.LittleEndian.Uint32(temp)
+	l := binary.BigEndian.Uint32(temp)
 
 	Arraycopy(data, 4, temp, 0, 4)
 	if strings.Compare(string(temp), MagicNumber) != 0 {
@@ -37,18 +37,18 @@ func DecodeProtocol(data []byte) []byte {
 func GetType(data []byte) int {
 	temp := make([]byte, 4)
 	Arraycopy(data, 4+4, temp, 0, 4)
-	return int(binary.LittleEndian.Uint32(temp))
+	return int(binary.BigEndian.Uint32(temp))
 }
 
 // EncodeProtocol 自定义协议编码
 func EncodeProtocol(data []byte, len int /*, TestProto.Types type*/) []byte {
 	temp := make([]byte, len+17)
 	buf := bytes.NewBuffer(temp)
-	binary.Write(buf, binary.LittleEndian, len)
+	binary.Write(buf, binary.BigEndian, len)
 	magic, _ := strconv.Atoi(MagicNumber)
-	binary.Write(buf, binary.LittleEndian, magic)
+	binary.Write(buf, binary.BigEndian, magic)
 	//TODO 这里需要填入proto对象的类型
-	binary.Write(buf, binary.LittleEndian, 12)
+	binary.Write(buf, binary.BigEndian, 12)
 	buf.Write(data)
 	buf.WriteString(END)
 	return buf.Bytes()
